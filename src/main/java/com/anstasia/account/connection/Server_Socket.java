@@ -2,10 +2,15 @@ package com.anstasia.account.connection;
 
 import com.anstasia.account.model.Account;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -15,6 +20,7 @@ public class Server_Socket implements Serializable, Runnable {
     private ObjectInputStream in;
     private ServerSocket ss;
     private Gson gs;
+    private Object obj;
 
     private int port = 6666; // случайный порт (может быть любое число от 1025 до 65535)
 
@@ -47,7 +53,8 @@ public class Server_Socket implements Serializable, Runnable {
                 e.printStackTrace();
             }
 
-            System.out.println("End of streams itit.");
+            System.out.println("End of streams init.");
+            System.out.println("________________________");
             Object line = null;
             boolean isConnected = true;
             while (isConnected) {
@@ -64,25 +71,34 @@ public class Server_Socket implements Serializable, Runnable {
                             out.writeObject((gs.toJson(DbConnection.getInstance().getAccountsArray())));
                             out.flush(); // заставляем поток закончить передачу данных.
                             System.out.println(gs.toJson(DbConnection.getInstance().getAccountsArray()));
+                            System.out.println("________________________");
                             // out.writeUTF(DbConnection.getInstance().getAccountsArray().toString()); // отсылаем клиенту обратно ту самую строку текста.
                             // System.out.println("Case genDataworked");
                             break;
                         case "addNewAccount":
                             System.out.println("Case downloadData line : " + line);
-                            //String balance = null, name = null;
-                            Account account = (Account)in.readObject();
+                            obj = in.readObject();
+                            Account account = gs.fromJson((String) obj, Account.class);
                             DbConnection.getInstance().addNewAccountDb(account);
-                            //DbConnection.getInstance().addNewAccountDb(account.getBalance(),account.getName());
-                            //out.writeObject(DbConnection.getInstance().getAccountsArray());
-                            // out.writeUTF(DbConnection.getInstance().getAccountsArray().toString()); // отсылаем клиенту обратно ту самую строку текста.
-                            // out.flush(); // заставляем поток закончить передачу данных.
-                            // System.out.println(DbConnection.getInstance().getAccountsArray());
+                            // System.out.println( gs.fromJson((String) obj, Account.class));
+                            //System.out.println(account.getClass());
+                            System.out.println("________________________");
                             break;
+                        case "deleteAccount":
+                            System.out.println("Case downloadData line : " + line);
+                            obj = in.readObject();
+                            int idAccountForDel = gs.fromJson((String) obj, int.class);
+                            DbConnection.getInstance().deleteAccount(idAccountForDel);
+                            // System.out.println( gs.fromJson((String) obj, Account.class));
+                            //System.out.println(account.getClass());
+                            System.out.println("________________________");
+                            break;
+
                     }
-                    System.out.println("The dumb client just sent me this line : " + line);
-                    System.out.println("I'm sending it back...");
-                    out.writeObject(line); // отсылаем клиенту обратно ту самую строку текста.
-                    out.flush(); // заставляем поток закончить передачу данных.
+//                    System.out.println("The dumb client just sent me this line : " + line);
+//                    System.out.println("I'm sending it back...");
+//                    out.writeObject(line); // отсылаем клиенту обратно ту самую строку текста.
+//                    out.flush(); // заставляем поток закончить передачу данных.
                     System.out.println("Waiting for the next line...");
                     System.out.println();
                 } catch (Exception e) {

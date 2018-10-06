@@ -29,18 +29,13 @@ public class DbConnection implements Serializable {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, pass);
             stmt = con.createStatement();
-
             // con.close();
-            //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/account", "root", "ROOT");
 
         } catch (NumberFormatException e) {
-            System.out.println(" У вас ошибка!!!! СОЕДИНЕНИЯ");
-        } catch (ClassNotFoundException e) {
+            System.out.println(" Error connection");
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            System.out.println(" У вас ошибка!!!! СОЕДИНЕНИЯ");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println(" У вас ошибка!!!! СОЕДИНЕНИЯ");
+            System.out.println("Error connection");
         }
     }
 
@@ -53,21 +48,22 @@ public class DbConnection implements Serializable {
     }
 
 
-    public  int accountSize()throws ClassNotFoundException, SQLException {
-        rs = stmt.executeQuery("select count(id) from objecta");
+    public  int accountSize()throws  SQLException {
+        rs = stmt.executeQuery("select max(id) from account.objecta");
         while (rs.next()) {
-            idCount = rs.getInt(1);
-            System.out.println(idCount);
+            idCount = rs.getInt(1)+1;
+            // System.out.println(idCount);
         }
         return idCount;
     }
+
     //вызов CreatePopupMenu и ObjectA
-    public void deleteAccount(int selectRow)throws ClassNotFoundException, SQLException{
-        String query = "delete from account.objecta where id=" + (selectRow+1);
+    public void deleteAccount(int idAccountForDel)throws SQLException{
+        String query = "delete from account.objecta where id=" + (idAccountForDel);
         stmt.executeUpdate(query);
-        rs = stmt.executeQuery("select *  from objecta");
-       // Controller.getInstance().accountGUI.accountTable.updateUI();
-        rs.getString(3);
+       // rs = stmt.executeQuery("select *  from objecta");
+        // Controller.getInstance().accountGUI.accountTable.updateUI();
+        //rs.getString(3);
         //PreparedStatement pst = con.prepareStatement("delete from objecta where id=" + (selectRow+1));
         // pst.setInt(1, rec.getId());
         // pst.executeUpdate();
@@ -124,11 +120,9 @@ public class DbConnection implements Serializable {
             stmt.executeUpdate(query);
             System.out.println(query);
         }
-        }
-
-
-
     }
+
+}
 
 
 
