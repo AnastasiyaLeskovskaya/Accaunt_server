@@ -95,10 +95,7 @@ public class Server_Socket implements Serializable, Runnable {
                             break;
 
                     }
-//                    System.out.println("The dumb client just sent me this line : " + line);
-//                    System.out.println("I'm sending it back...");
-//                    out.writeObject(line); // отсылаем клиенту обратно ту самую строку текста.
-//                    out.flush(); // заставляем поток закончить передачу данных.
+
                     System.out.println("Waiting for the next line...");
                     System.out.println();
                 } catch (Exception e) {

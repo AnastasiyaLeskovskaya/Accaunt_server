@@ -61,12 +61,6 @@ public class DbConnection implements Serializable {
     public void deleteAccount(int idAccountForDel)throws SQLException{
         String query = "delete from account.objecta where id=" + (idAccountForDel);
         stmt.executeUpdate(query);
-       // rs = stmt.executeQuery("select *  from objecta");
-        // Controller.getInstance().accountGUI.accountTable.updateUI();
-        //rs.getString(3);
-        //PreparedStatement pst = con.prepareStatement("delete from objecta where id=" + (selectRow+1));
-        // pst.setInt(1, rec.getId());
-        // pst.executeUpdate();
     }
 
     //вызов EditAccountDialog
