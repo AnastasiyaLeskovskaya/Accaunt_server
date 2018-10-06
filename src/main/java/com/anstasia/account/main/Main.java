@@ -20,9 +20,6 @@ public class Main {
         Server_Socket ss = new Server_Socket();
         Thread t1 = new Thread(ss);
         t1.start();
-
-
-
-    }
+        }
 }
 
