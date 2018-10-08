@@ -93,6 +93,11 @@ public class Server_Socket implements Serializable, Runnable {
                             //System.out.println(account.getClass());
                             System.out.println("________________________");
                             break;
+                        case "deleteAllAccounts":
+                            System.out.println("Case downloadData line : " + line);
+                            DbConnection.getInstance().deleteAllAccountsFromDb();
+                            System.out.println("________________________");
+                            break;
 
                     }
 

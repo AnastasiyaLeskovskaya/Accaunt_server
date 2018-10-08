@@ -62,6 +62,11 @@ public class DbConnection implements Serializable {
         String query = "delete from account.objecta where id=" + (idAccountForDel);
         stmt.executeUpdate(query);
     }
+    public void deleteAllAccountsFromDb()throws SQLException{
+        String query = "delete from account.objecta ";
+        stmt.executeUpdate(query);
+    }
+
 
     //вызов EditAccountDialog
     public  ArrayList<Account> getAccountsArray() throws ClassNotFoundException, SQLException, JsonProcessingException {
